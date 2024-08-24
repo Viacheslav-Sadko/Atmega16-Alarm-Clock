@@ -1,16 +1,6 @@
-/*
- * I2C.h
- *
- * Created: 23.08.2024 22:19:57
- *  Author: SDK
- */ 
-
-
-#ifndef I2C_H_
-#define I2C_H_
-
-
-
-
-
-#endif /* I2C_H_ */
+void I2C_init();
+void I2C_Start();
+void I2C_Stop();
+void I2C_Send_byte(unsigned char c);
+unsigned char I2C_Read_byte(void);
+unsigned char I2C_ReadLastByte(void);

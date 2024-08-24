@@ -40,11 +40,15 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Lib/Src/AT24C32.c \
 ../Lib/Src/Buzzer.c \
+../Lib/Src/DS1307.c \
 ../Lib/Src/I2C.c \
 ../Lib/Src/LCD.c \
 ../Lib/Src/MCU_Init.c \
+../Lib/Src/Timer.c \
 ../Lib/Src/UART.c \
+../Lib/Src/Unit_Test.c \
 ../main.c
 
 
@@ -55,35 +59,51 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Lib/Src/AT24C32.o \
 Lib/Src/Buzzer.o \
+Lib/Src/DS1307.o \
 Lib/Src/I2C.o \
 Lib/Src/LCD.o \
 Lib/Src/MCU_Init.o \
+Lib/Src/Timer.o \
 Lib/Src/UART.o \
+Lib/Src/Unit_Test.o \
 main.o
 
 OBJS_AS_ARGS +=  \
+Lib/Src/AT24C32.o \
 Lib/Src/Buzzer.o \
+Lib/Src/DS1307.o \
 Lib/Src/I2C.o \
 Lib/Src/LCD.o \
 Lib/Src/MCU_Init.o \
+Lib/Src/Timer.o \
 Lib/Src/UART.o \
+Lib/Src/Unit_Test.o \
 main.o
 
 C_DEPS +=  \
+Lib/Src/AT24C32.d \
 Lib/Src/Buzzer.d \
+Lib/Src/DS1307.d \
 Lib/Src/I2C.d \
 Lib/Src/LCD.d \
 Lib/Src/MCU_Init.d \
+Lib/Src/Timer.d \
 Lib/Src/UART.d \
+Lib/Src/Unit_Test.d \
 main.d
 
 C_DEPS_AS_ARGS +=  \
+Lib/Src/AT24C32.d \
 Lib/Src/Buzzer.d \
+Lib/Src/DS1307.d \
 Lib/Src/I2C.d \
 Lib/Src/LCD.d \
 Lib/Src/MCU_Init.d \
+Lib/Src/Timer.d \
 Lib/Src/UART.d \
+Lib/Src/Unit_Test.d \
 main.d
 
 OUTPUT_FILE_PATH +=Alarm_clock.elf
@@ -100,7 +120,21 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+Lib/Src/AT24C32.o: ../Lib/Src/AT24C32.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 Lib/Src/Buzzer.o: ../Lib/Src/Buzzer.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Lib/Src/DS1307.o: ../Lib/Src/DS1307.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
@@ -128,7 +162,21 @@ Lib/Src/MCU_Init.o: ../Lib/Src/MCU_Init.c
 	@echo Finished building: $<
 	
 
+Lib/Src/Timer.o: ../Lib/Src/Timer.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 Lib/Src/UART.o: ../Lib/Src/UART.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Lib/Src/Unit_Test.o: ../Lib/Src/Unit_Test.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

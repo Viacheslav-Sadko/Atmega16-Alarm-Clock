@@ -1,16 +1,5 @@
-/*
- * UART.h
- *
- * Created: 23.08.2024 22:19:17
- *  Author: SDK
- */ 
+#include <avr/io.h>
+#include <util/delay.h>
 
-
-#ifndef UART_H_
-#define UART_H_
-
-
-
-
-
-#endif /* UART_H_ */
+void UART_init(unsigned int speed);
+void UART_Transmit(unsigned char data);
