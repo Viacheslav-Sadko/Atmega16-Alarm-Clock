@@ -42,6 +42,7 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../Lib/Src/AT24C32.c \
 ../Lib/Src/Buzzer.c \
+../Lib/Src/Clock.c \
 ../Lib/Src/DS1307.c \
 ../Lib/Src/I2C.c \
 ../Lib/Src/LCD.c \
@@ -61,6 +62,7 @@ ASM_SRCS +=
 OBJS +=  \
 Lib/Src/AT24C32.o \
 Lib/Src/Buzzer.o \
+Lib/Src/Clock.o \
 Lib/Src/DS1307.o \
 Lib/Src/I2C.o \
 Lib/Src/LCD.o \
@@ -73,6 +75,7 @@ main.o
 OBJS_AS_ARGS +=  \
 Lib/Src/AT24C32.o \
 Lib/Src/Buzzer.o \
+Lib/Src/Clock.o \
 Lib/Src/DS1307.o \
 Lib/Src/I2C.o \
 Lib/Src/LCD.o \
@@ -85,6 +88,7 @@ main.o
 C_DEPS +=  \
 Lib/Src/AT24C32.d \
 Lib/Src/Buzzer.d \
+Lib/Src/Clock.d \
 Lib/Src/DS1307.d \
 Lib/Src/I2C.d \
 Lib/Src/LCD.d \
@@ -97,6 +101,7 @@ main.d
 C_DEPS_AS_ARGS +=  \
 Lib/Src/AT24C32.d \
 Lib/Src/Buzzer.d \
+Lib/Src/Clock.d \
 Lib/Src/DS1307.d \
 Lib/Src/I2C.d \
 Lib/Src/LCD.d \
@@ -128,6 +133,13 @@ Lib/Src/AT24C32.o: ../Lib/Src/AT24C32.c
 	
 
 Lib/Src/Buzzer.o: ../Lib/Src/Buzzer.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Lib/Src/Clock.o: ../Lib/Src/Clock.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\include" -I"../Lib/Inc"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega16 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\gcc\dev\atmega16" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

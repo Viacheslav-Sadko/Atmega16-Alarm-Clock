@@ -155,6 +155,9 @@
     <Compile Include="Lib\Inc\Buzzer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Lib\Inc\Clock.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Lib\Inc\DS1307.h">
       <SubType>compile</SubType>
     </Compile>
@@ -180,6 +183,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Lib\Src\Buzzer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Lib\Src\Clock.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Lib\Src\DS1307.c">

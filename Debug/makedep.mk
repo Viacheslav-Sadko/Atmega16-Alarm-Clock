@@ -6,6 +6,8 @@ Lib\Src\AT24C32.c
 
 Lib\Src\Buzzer.c
 
+Lib\Src\Clock.c
+
 Lib\Src\DS1307.c
 
 Lib\Src\I2C.c
