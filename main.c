@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
+#include <stdio.h>
 #include "stdlib.h"
 
 #include "main.h"
@@ -19,9 +19,10 @@
 int main(void){
 	
 	MCU_Init();
-	//sei();
 	LCD_Clear();
-	LCD_String("Alarm");
+	AT24C32_Read(&data_from_eeprom);
+	alarm_hours = data_from_eeprom[0];
+	alarm_minutes = data_from_eeprom[1];
 	while (1){
 		Clock_Alarm();
 	}

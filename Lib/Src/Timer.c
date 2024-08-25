@@ -1,5 +1,7 @@
 #include "Timer.h"
+
 volatile uint8_t timer_flag = 0;
+
 ISR(TIMER1_COMPA_vect){
 	if(timer_flag == 0)
 		timer_flag = 1;

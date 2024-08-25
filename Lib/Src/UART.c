@@ -13,3 +13,10 @@ void UART_Transmit(unsigned char data) {
 	while( !(UCSRA & (1 << UDRE)) );
 	UDR = data;
 }
+
+void UART_Transmit_String(const char* str) {
+	while (*str) { 
+		UART_Transmit(*str); 
+		str++; 
+	}
+}

@@ -1,7 +1,6 @@
 #include <avr/io.h>
 
-#define EE_adrr 0xA0
-#define TW_MT_DATA_ASK 0x28
+#define AT24C32_ADDR 0x50
 
 unsigned char EE_Read_byte();
 int EE_Write_byte(unsigned char c);

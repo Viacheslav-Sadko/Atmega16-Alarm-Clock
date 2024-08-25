@@ -58,9 +58,3 @@ void Unit_Test_Buttons(){
 	}
 }
 
-void Unit_Test_Buzzer(){
-	if(timer_flag == 0)
-		PORTA &= ~(1 << Buzzer);
-	else if(timer_flag == 1)
-		PORTA |=  (1 << Buzzer);
-}

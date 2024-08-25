@@ -6,8 +6,8 @@
 
 #define Buzzer PA0
 
-#define Button_Set PB1
-#define Button_Ok PB0
+#define Button_Set PB0
+#define Button_Ok PB1
 #define Led_Blue PD6
 #define Led_Red PD5
 

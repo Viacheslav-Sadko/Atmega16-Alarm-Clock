@@ -1,27 +1,38 @@
 #include "DS1307.h"
 
-unsigned char sec, min, hour, day, date, month, year;
+volatile uint8_t time[3] = {0};
 
-unsigned char RTC_bin_dec(unsigned char c){
-	unsigned char res = ((c/10) << 4)|(c % 10);
+uint8_t RTC_Bin_To_Dec(uint8_t c){
+	uint8_t res = ((c >> 4) * 10) + (c & 0x0F);
 	return res;
 }
 
-unsigned char RTC_dec_bin(unsigned char c){
-	unsigned char res = ((c >> 4)*10 + (0b00001111 & c));
+uint8_t RTC_Dec_To_Bin(uint8_t c){
+	uint8_t res = ((c / 10) << 4) | (c % 10);
 	return res;
 }
 
-void RTC_write(){
+void DS1307_Set_Time(uint8_t hour, uint8_t minute){
 	I2C_Start();
-	I2C_Send_byte(RTC_addr_w);
-	I2C_Send_byte(0);
-	I2C_Send_byte(RTC_bin_dec(50)); //sec
-	I2C_Send_byte(RTC_bin_dec(53)); //min
-	I2C_Send_byte(RTC_bin_dec(20)); //hour
-	I2C_Send_byte(RTC_bin_dec(4)); //huyna
-	I2C_Send_byte(RTC_bin_dec(28)); //day
-	I2C_Send_byte(RTC_bin_dec(5)); //month
-	I2C_Send_byte(RTC_bin_dec(24)); //year
+	I2C_Send_Byte((DS1307_ADDR << 1) & 0xFE);  // Write address
+	I2C_Send_Byte(0x00);  // Start address for time
+	I2C_Send_Byte(0);
+	I2C_Send_Byte(RTC_Dec_To_Bin(minute));
+	I2C_Send_Byte(RTC_Dec_To_Bin(hour));
 	I2C_Stop();
+}
+
+void DS1307_Read_Time(){
+	I2C_Start();
+	I2C_Send_Byte((DS1307_ADDR << 1) & 0xFE);  // Write address
+	I2C_Send_Byte(0x00);  // Start address for time
+	I2C_Start();
+	I2C_Send_Byte((DS1307_ADDR << 1) | 0x01);  // Read address
+	time[0] = I2C_Read_Byte();
+	time[1] = I2C_Read_Byte();
+	time[2] = I2C_Read_Last_Byte();
+	I2C_Stop();
+	time[0] = RTC_Bin_To_Dec(time[0]);
+	time[1] = RTC_Bin_To_Dec(time[1]);
+	time[2] = RTC_Bin_To_Dec(time[2]);
 }

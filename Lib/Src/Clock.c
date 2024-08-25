@@ -13,11 +13,15 @@ typedef enum {
 Mode Current_Mode = MODE_NORMAL;
 
 uint8_t selected_parameter = 0;
-uint8_t hours = 2, minutes = 25, seconds = 0, day = 13, month = 8, year = 24; // Значення часу і дати
+uint8_t hours = 2, minutes = 25;
 uint8_t latest_get_current_value = 100;
 uint8_t alarm_hours = 0, alarm_minutes = 0;
-
+uint8_t last_minutes = 255;
 const uint8_t max_values[] = {23, 59, 59, 31, 12, 99};
+uint8_t finish_menu =  0;
+
+uint8_t data_to_send[2] = {0};
+uint8_t data_from_eeprom[2] = {0};
 
 uint8_t* Alarm_Get_Current_Value_Ptr(){
 	switch (selected_parameter) {
@@ -97,9 +101,27 @@ void Display_Current_Setting(uint8_t mode){
 }
 
 void Display_Time(){
+	char timeStr[16];
+	DS1307_Read_Time();
+	hours = time[2];
+	minutes = time[1];
+	if(minutes != last_minutes || finish_menu == 1){
+		finish_menu = 0;
+		last_minutes = minutes;
+		LCD_Set_Cursor(0, 0);
+		LCD_String("Time:     Alarm:");
+		LCD_Set_Cursor(0, 1);
+		sprintf(timeStr, "%02d:%02d      %02d:%02d", hours, minutes, alarm_hours, alarm_minutes );
+		LCD_String(timeStr);
+	}
 	
-	LCD_Set_Cursor(0, 0);
-	LCD_String("Time:     Alarm:");
+	 if (hours == alarm_hours && minutes == alarm_minutes) {
+		 while(PINB & (1 << Button_Ok)){
+			Buzzer_Play();
+		 }
+		_delay_ms(30000);
+	 }
+	
 }
 
 void Increase_Value(){
@@ -121,8 +143,15 @@ void Alarm_Increase_Value(){
 }
 
 
-void Save_Setting(){
-	
+void Save_Setting(uint8_t mode){
+	if(mode == 0){
+		DS1307_Set_Time(hours, minutes);
+	}
+	else if(mode == 1){
+		data_to_send[0] = alarm_hours; 
+		data_to_send[1] = alarm_minutes; 
+		AT24C32_Write(&data_to_send);
+	}
 }
 void Enter_Set_Time_Mode(){
 	LCD_Clear();
@@ -131,16 +160,17 @@ void Enter_Set_Time_Mode(){
 	
 	while(1){
 		Display_Current_Setting(0);
-		if(!(PINB & (1 << Button_Ok))){
+		if(!(PINB & (1 << Button_Set))){
 			_delay_ms(250);
 			Increase_Value();
 		}
-		if(!(PINB & (1 << Button_Set))){
+		if(!(PINB & (1 << Button_Ok))){
 			_delay_ms(250);
 			selected_parameter++;
 			if(selected_parameter > 1){
 				selected_parameter = 0;
-				Save_Setting(1);
+				Save_Setting(0);
+				finish_menu++;
 				break;
 			}
 		}
@@ -155,16 +185,17 @@ void Enter_Set_Alarm_Mode(){
 	
 	while(1){
 		Display_Current_Setting(1);
-		if(!(PINB & (1 << Button_Ok))){
+		if(!(PINB & (1 << Button_Set))){
 			_delay_ms(250);
 			Alarm_Increase_Value();
 		}
-		if(!(PINB & (1 << Button_Set))){
+		if(!(PINB & (1 << Button_Ok))){
 			_delay_ms(250);
 			selected_parameter++;
 			if(selected_parameter > 1){
 				selected_parameter = 0;
-				Save_Setting(0);
+				Save_Setting(1);
+				finish_menu++;
 				break;
 			}
 		}
@@ -178,7 +209,7 @@ void Clock_Alarm(){
 		
 		Display_Time();
 	}
-	if(!(PINB & (1 << Button_Ok))){
+	if(!(PINB & (1 << Button_Set))){
 		_delay_ms(250);
 		switch(Current_Mode){
 			case MODE_NORMAL:
@@ -219,7 +250,7 @@ void Clock_Alarm(){
 			break;
 		}
 	}
-	if(!(PINB & (1 << Button_Set)) && Current_Mode == MODE_MENU){
+	if(!(PINB & (1 << Button_Ok)) && Current_Mode == MODE_MENU){
 		_delay_ms(250);
 		if (flag_set == 0) {
 			Enter_Set_Time_Mode();
