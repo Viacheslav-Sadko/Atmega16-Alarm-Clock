@@ -172,7 +172,7 @@ void Enter_Set_Alarm_Mode(){
 		Display_Current_Setting(1);
 		if(!(PINB & (1 << Button_Ok))){
 			_delay_ms(250);
-			Increase_Value();
+			Alarm_Increase_Value();
 		}
 		if(!(PINB & (1 << Button_Set))){
 			_delay_ms(250);
