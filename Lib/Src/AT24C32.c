@@ -7,8 +7,9 @@ void AT24C32_Write(uint8_t* data_array){
 }
 
 void AT24C32_Read(uint8_t* data_array){
-	I2C_Master_Read(AT24C32_ADDR, 0, data_array, 2);
+	I2C_Master_Read(AT24C32_ADDR, 0, data_array, 3);
 }
+
 // 	char buff[7];
 // 	AT24C32_Write(&data_to_send);
 // 	_delay_ms(1000);

@@ -2,7 +2,5 @@
 
 #define AT24C32_ADDR 0x50
 
-unsigned char EE_Read_byte();
-int EE_Write_byte(unsigned char c);
-void read();
-void write();
+void AT24C32_Write(uint8_t* data_array);
+void AT24C32_Read(uint8_t* data_array);

@@ -23,7 +23,7 @@ main.d main.o: .././main.c \
  ../Lib/Inc/LCD.h ../Lib/Inc/UART.h ../Lib/Inc/MCU_Init.h \
  ../Lib/Inc/I2C.h ../Lib/Inc/AT24C32.h ../Lib/Inc/DS1307.h \
  ../Lib/Inc/Unit_test.h ../Lib/Inc/Timer.h ../Lib/Inc/Clock.h \
- ../Lib/Inc/Buzzer.h ../Lib/Inc/DS1307.h
+ ../Lib/Inc/Buzzer.h ../Lib/Inc/DS1307.h ../Lib/Inc/AT24C32.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -98,3 +98,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../Lib/Inc/Buzzer.h:
 
 ../Lib/Inc/DS1307.h:
+
+../Lib/Inc/AT24C32.h:

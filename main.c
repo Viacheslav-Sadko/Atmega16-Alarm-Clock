@@ -23,6 +23,7 @@ int main(void){
 	AT24C32_Read(&data_from_eeprom);
 	alarm_hours = data_from_eeprom[0];
 	alarm_minutes = data_from_eeprom[1];
+	alarm_status = data_from_eeprom[2];
 	while (1){
 		Clock_Alarm();
 	}

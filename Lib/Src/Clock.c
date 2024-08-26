@@ -21,7 +21,118 @@ const uint8_t max_values[] = {23, 59, 59, 31, 12, 99};
 uint8_t finish_menu =  0;
 
 uint8_t data_to_send[2] = {0};
-uint8_t data_from_eeprom[2] = {0};
+uint8_t data_from_eeprom[3] = {0};
+
+uint8_t alarm_status;
+
+void Display_Time(){
+	char timeStr[16];
+	DS1307_Read_Time();
+	hours = time[2];
+	minutes = time[1];
+	if(minutes != last_minutes || finish_menu == 1){
+		finish_menu = 0;
+		last_minutes = minutes;
+		LCD_Set_Cursor(0, 0);
+		LCD_String("Time:     Alarm:");
+		LCD_Set_Cursor(0, 1);
+		sprintf(timeStr, "%02d:%02d      %02d:%02d", hours, minutes, alarm_hours, alarm_minutes );
+		LCD_String(timeStr);
+	}
+	
+	if (hours == alarm_hours && minutes == alarm_minutes && alarm_status) {
+		while(PINB & (1 << Button_Ok)){
+			Buzzer_Play();
+		}
+		_delay_ms(30000);
+	}
+}
+
+void Clock_Alarm(){
+	Alarm_Check();
+	
+	if (Current_Mode == MODE_NORMAL) {
+		_delay_ms(150);
+		Display_Time();
+	}
+	if(!(PINB & (1 << Button_Set))){
+		_delay_ms(250);
+		switch(Current_Mode){
+			case MODE_NORMAL:
+			Current_Mode = MODE_MENU;
+			flag_set = 0;
+			LCD_Clear();
+			LCD_Set_Cursor(0, 0);
+			LCD_String("* Set time");
+			LCD_Set_Cursor(0, 1);
+			LCD_String("  Set alarm");
+			break;
+			
+			case MODE_MENU:
+			if (flag_set == 0) {
+				LCD_Clear();
+				LCD_Set_Cursor(0, 0);
+				LCD_String("  Set time");
+				LCD_Set_Cursor(0, 1);
+				LCD_String("* Set alarm");
+				flag_set = 1;
+				} else {
+				LCD_Clear();
+				LCD_Set_Cursor(0, 0);
+				LCD_String("* Set time");
+				LCD_Set_Cursor(0, 1);
+				LCD_String("  Set alarm");
+				flag_set = 0;
+			}
+			break;
+			case MODE_SET_TIME:
+			Enter_Set_Time_Mode();
+			Current_Mode = MODE_NORMAL;
+			break;
+
+			case MODE_SET_ALARM:
+			Enter_Set_Alarm_Mode();
+			Current_Mode = MODE_NORMAL;
+			break;
+		}
+	}
+	if(!(PINB & (1 << Button_Ok)) && Current_Mode == MODE_MENU){
+		_delay_ms(250);
+		if (flag_set == 0) {
+			Enter_Set_Time_Mode();
+			LCD_Clear();
+			Current_Mode = MODE_NORMAL;
+			} else {
+			Enter_Set_Alarm_Mode();
+			LCD_Clear();
+			Current_Mode = MODE_NORMAL;
+		}
+	}
+	if(!(PINB & (1 << Button_Ok)) && Current_Mode == MODE_NORMAL){
+		Alarm_Status();
+	}
+}
+
+void Alarm_Status(){
+	if(alarm_status == 0){
+		alarm_status++;
+		I2C_Start();
+		I2C_Send_Byte((AT24C32_ADDR << 1) & 0xFE);
+		I2C_Send_Byte(0);
+		I2C_Send_Byte(2);
+		I2C_Send_Byte(alarm_status);
+		I2C_Stop();
+	}
+	else if(alarm_status == 1){
+		alarm_status--;
+		I2C_Start();
+		I2C_Send_Byte((AT24C32_ADDR << 1) & 0xFE);
+		I2C_Send_Byte(0);
+		I2C_Send_Byte(2);
+		I2C_Send_Byte(alarm_status);
+		I2C_Stop();
+	}
+}
 
 uint8_t* Alarm_Get_Current_Value_Ptr(){
 	switch (selected_parameter) {
@@ -98,30 +209,6 @@ void Display_Current_Setting(uint8_t mode){
 		}
 		break;
 	}
-}
-
-void Display_Time(){
-	char timeStr[16];
-	DS1307_Read_Time();
-	hours = time[2];
-	minutes = time[1];
-	if(minutes != last_minutes || finish_menu == 1){
-		finish_menu = 0;
-		last_minutes = minutes;
-		LCD_Set_Cursor(0, 0);
-		LCD_String("Time:     Alarm:");
-		LCD_Set_Cursor(0, 1);
-		sprintf(timeStr, "%02d:%02d      %02d:%02d", hours, minutes, alarm_hours, alarm_minutes );
-		LCD_String(timeStr);
-	}
-	
-	 if (hours == alarm_hours && minutes == alarm_minutes) {
-		 while(PINB & (1 << Button_Ok)){
-			Buzzer_Play();
-		 }
-		_delay_ms(30000);
-	 }
-	
 }
 
 void Increase_Value(){
@@ -203,63 +290,14 @@ void Enter_Set_Alarm_Mode(){
 	}
 }
 
-void Clock_Alarm(){
-	
-	if (Current_Mode == MODE_NORMAL) {
-		
-		Display_Time();
+void Alarm_Check(){
+	if(alarm_status){
+		PORTD |= (1 << Led_Blue);
+		PORTD &= ~(1 << Led_Red);
 	}
-	if(!(PINB & (1 << Button_Set))){
-		_delay_ms(250);
-		switch(Current_Mode){
-			case MODE_NORMAL:
-			Current_Mode = MODE_MENU;
-			flag_set = 0;
-			LCD_Clear();
-			LCD_Set_Cursor(0, 0);
-			LCD_String("* Set time");
-			LCD_Set_Cursor(0, 1);
-			LCD_String("  Set alarm");
-			break;
-			
-			case MODE_MENU:
-			if (flag_set == 0) {
-				LCD_Clear();
-				LCD_Set_Cursor(0, 0);
-				LCD_String("  Set time");
-				LCD_Set_Cursor(0, 1);
-				LCD_String("* Set alarm");
-				flag_set = 1;
-				} else {
-				LCD_Clear();
-				LCD_Set_Cursor(0, 0);
-				LCD_String("* Set time");
-				LCD_Set_Cursor(0, 1);
-				LCD_String("  Set alarm");
-				flag_set = 0;
-			}
-			break;
-			case MODE_SET_TIME:
-			Enter_Set_Time_Mode();
-			Current_Mode = MODE_NORMAL;
-			break;
-
-			case MODE_SET_ALARM:
-			Enter_Set_Alarm_Mode();
-			Current_Mode = MODE_NORMAL;
-			break;
-		}
-	}
-	if(!(PINB & (1 << Button_Ok)) && Current_Mode == MODE_MENU){
-		_delay_ms(250);
-		if (flag_set == 0) {
-			Enter_Set_Time_Mode();
-			LCD_Clear();
-			Current_Mode = MODE_NORMAL;
-			} else {
-			Enter_Set_Alarm_Mode();
-			LCD_Clear();
-			Current_Mode = MODE_NORMAL;
-		}
+	else{
+		PORTD |= (1 << Led_Red);
+		PORTD &= ~(1 << Led_Blue);
 	}
 }
+

@@ -16,7 +16,7 @@ Lib/Src/Clock.d Lib/Src/Clock.o: ../Lib/Src/Clock.c ../Lib/Inc/Clock.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  ../Lib/Inc/I2C.h ../Lib/Inc/Buzzer.h ../Lib/Inc/Timer.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
- ../Lib/Inc/main.h ../Lib/Inc/DS1307.h
+ ../Lib/Inc/main.h ../Lib/Inc/DS1307.h ../Lib/Inc/AT24C32.h
 
 ../Lib/Inc/Clock.h:
 
@@ -63,3 +63,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../Lib/Inc/main.h:
 
 ../Lib/Inc/DS1307.h:
+
+../Lib/Inc/AT24C32.h:

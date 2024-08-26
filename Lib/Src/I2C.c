@@ -49,25 +49,23 @@ void I2C_Master_Write(uint8_t slave_address, uint16_t memory_stacker, uint8_t* p
 
 void I2C_Master_Read(uint8_t slave_address, uint16_t memory_stacker, uint8_t* pData, uint8_t size){
 	I2C_Start();
-	I2C_Send_Byte((slave_address << 1) & 0xFE);  // Передаємо адресу пристрою з бітами запису
-	I2C_Send_Byte(memory_stacker >> 8);          // Старший байт адреси комірки пам'яті
-	I2C_Send_Byte(memory_stacker);               // Молодший байт адреси комірки пам'яті
+	I2C_Send_Byte((slave_address << 1) & 0xFE); 
+	I2C_Send_Byte(memory_stacker >> 8);         
+	I2C_Send_Byte(memory_stacker);              
 	
-	I2C_Start(); // Перезапуск для читання
-	I2C_Send_Byte((slave_address << 1) | 0x01);  // Передаємо адресу пристрою з бітами читання
+	I2C_Start(); 
+	I2C_Send_Byte((slave_address << 1) | 0x01); 
 
 	for(uint8_t i = 0; i < size; i++){
-		_delay_us(I2C_DELAY); // Затримка
+		_delay_us(I2C_DELAY);
 		if (i < (size - 1)) {
-			pData[i] = I2C_Read_Byte(1); // Читаємо байт даних, ACK для всіх крім останнього байта
+			pData[i] = I2C_Read_Byte(1); 
 			} else {
-			pData[i] = I2C_Read_Last_Byte(); // Читаємо останній байт, NACK
+			pData[i] = I2C_Read_Last_Byte();
 		}
 	}
 	I2C_Stop();
 }
-
-
 
 void I2C_Scanner() {
 	char buff[30];
